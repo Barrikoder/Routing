@@ -29,15 +29,16 @@ app.get("/:id", async (req, res) => {
     }
 });
 
-app.post("/", body("age").isLength({ max: 3 }),
+app.post("/", body("age").isFloat({ min: 0, max: 120 }),
 
     async (req, res) => {
-        // const {first_name} = req.params;
-        // const {last_name} = req.params;
-        // const {age} = req.params;
+        const { body: {first_name, last_name, age}
+    } = req;
+        if (!first_name || !last_name || !age)
+        return res.status(400).send({ error: "Type smth!"});
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ errors: "Sad truth: people don't live for so long" });
         }
 
         try {
