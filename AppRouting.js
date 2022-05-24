@@ -71,6 +71,19 @@ app.put("/:id", body("age").isFloat({ min: 0, max: 120 }),
         }
     });
 
+app.delete("/:id", async (req, res) => {
+    const { params: { id }
+    } = req;
+    console.log(req);
+    if (!id)
+        return res.status(404).send({ error: "ID not found!" });
+    try {
+        const { rows } = await pool.query("DELETE FROM users WHERE id=$1", [req.params.id]);
+        res.status(200).send(rows);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+})
 
 app.listen(port, () => {
     console.log(`App is listening on port ${port}`);
